@@ -1,0 +1,1206 @@
+//1. Membuat Database Baru (dbpegawai)
+MariaDB [(none)]> CREATE DATABASE dbpegawai;
+Query OK, 1 row affected (0.001 sec)
+
+//2. Membuka Database(dbpegawai)
+MariaDB [(none)]> USE dbpegawai;
+Database changed
+
+//3 Membuat Tabel baru(divisi)
+MariaDB [dbpegawai]> CREATE TABLE divisi(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null unique);
+Query OK, 0 rows affected (0.018 sec)
+
+//4. Menampilkan Desk Tabel divisi
+MariaDB [dbpegawai]> DESC divisi;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.015 sec)
+
+//5. Membuat tabel Baru(jabatan)
+MariaDB [dbpegawai]> CREATE TABLE jabatan(
+    -> id int primary key auto_increment,
+    -> nama varchar(30) not null unique);
+Query OK, 0 rows affected (0.017 sec)
+
+
+//6. Menampilkan Desk Tabel jabatan
+MariaDB [dbpegawai]> DESC jabatan;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nama  | varchar(30) | NO   | UNI | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.011 sec)\
+
+//7 Membuat tabel Baru(pegawai)
+Sesuai Desk soal
+MariaDB [dbpegawai]> CREATE TABLE pegawai(
+    -> id int primary key auto_increment,
+    -> nip char(5) NOT NULL UNIQUE,
+    -> nama VARCHAR(30) NOT NULL,
+    -> gender ENUM ('Laki-Laki','Perempuan') NOT NULL,
+    -> tmp_lahir VARCHAR(30) NOT NULL,
+    -> tgl_lahir DATE NOT NULL,
+    -> iddivisi INT NOT NULL REFERENCES divisi(id),
+    -> idjabatan INT NOT NULL REFERENCES jabatan(id),
+    -> alamat TEXT);
+Query OK, 0 rows affected (0.022 sec)
+
+//8. Menampilkan Desk Tabel(pegawai)
+MariaDB [dbpegawai]> DESC pegawai;
++-----------+-------------------------------+------+-----+---------+----------------+
+| Field     | Type                          | Null | Key | Default | Extra          |
++-----------+-------------------------------+------+-----+---------+----------------+
+| id        | int(11)                       | NO   | PRI | NULL    | auto_increment |
+| nip       | char(5)                       | NO   | UNI | NULL    |                |
+| nama      | varchar(30)                   | NO   |     | NULL    |                |
+| gender    | enum('Laki-Laki','Perempuan') | NO   |     | NULL    |                |
+| tmp_lahir | varchar(30)                   | NO   |     | NULL    |                |
+| tgl_lahir | date                          | NO   |     | NULL    |                |
+| iddivisi  | int(11)                       | NO   |     | NULL    |                |
+| idjabatan | int(11)                       | NO   |     | NULL    |                |
+| alamat    | text                          | YES  |     | NULL    |                |
++-----------+-------------------------------+------+-----+---------+----------------+
+9 rows in set (0.006 sec)
+
+//9. Menampilkan Tabel-tabel yang ada di dbpegawai
+MariaDB [dbpegawai]> SHOW TABLES;
++---------------------+
+| Tables_in_dbpegawai |
++---------------------+
+| divisi              |
+| jabatan             |
+| pegawai             |
++---------------------+
+3 rows in set (0.001 sec)
+
+
+//10.Menginput data Divisi (SDM,Keuangan,Marketing)
+MariaDB [dbpegawai]> INSERT INTO divisi VALUES
+    -> ('','SDM'), ('','Keuangan'),('','Marketing'),('','IT');
+Query OK, 4 rows affected, 4 warnings (0.012 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+//11.Menampilkan seluruh data divisi
+MariaDB [dbpegawai]> SELECT * FROM divisi;
++----+-----------+
+| id | nama      |
++----+-----------+
+|  4 | IT        |
+|  2 | Keuangan  |
+|  3 | Marketing |
+|  1 | SDM       |
++----+-----------+
+4 rows in set (0.001 sec)
+
+//12.Menginput Data jabatan(Direktur,Manajer,Asisten Manajer, Staff)
+MariaDB [dbpegawai]> INSERT INTO jabatan VALUES
+    -> ('','Direktur'),('','Manajer'),('','Asisten Manajer'),('','Staff');
+Query OK, 4 rows affected, 4 warnings (0.010 sec)
+Records: 4  Duplicates: 0  Warnings: 4
+
+//13.Menampilkan seluruh data jabatan
+MariaDB [dbpegawai]> SELECT * FROM jabatan;
++----+-----------------+
+| id | nama            |
++----+-----------------+
+|  3 | Asisten Manajer |
+|  1 | Direktur        |
+|  2 | Manajer         |
+|  4 | Staff           |
++----+-----------------+
+4 rows in set (0.001 sec)
+
+
+//14. Input 20 orang pegawai ( 1 divisi 5 orang, untuk gender dan jabatan diacak)
+MariaDB [dbpegawai]> INSERT INTO pegawai(
+    -> nip,nama,gender,tmp_lahir,tgl_lahir,iddivisi,idjabatan,alamat) VALUES
+    -> ('11111','Muhammad Sumbul','Laki-Laki','Semarang','1985-12-20',4,4,'Malang'),
+    -> ('11112','Ilham Santoso','Laki-Laki','Bandung','1995-02-10',4,4,'Bima'),
+    -> ('11113','Fitriyani','Perempuan','Aceh','1972-06-03',4,3,'Mataram'),
+    -> ('11114','Muhammad Salim','Laki-Laki','Arab','1970-02-01',4,2,'Bogor'),
+    -> ('11115','Asep Sumanto','Laki-Laki','Jakarta','1999-05-10',4,4,'Makassar'),
+    -> ('11116','Uni Ramadhani','Perempuan','Batak','1982-01-07',3,1,'Malang'),
+    -> ('11117','Nur Indah','Perempuan','Bima','1992-11-04',3,2,'Makassar'),
+    -> ('11118','Muhammad Usman','Laki-Laki','Jakarta','1989-08-14',3,4,'Depok'),
+    -> ('11119','Muhammad Ali','Laki-Laki','Bekasi','1983-09-01',3,3,'Solo'),
+    -> ('11120','Isna Wati','Perempuan','Lampung','1991-11-17',3,4,'Jakarta'),
+    -> ('11121','Fitrah Utami','Perempuan','Banten','2000-10-23',2,1,'Mataram'),
+    -> ('11122','Nilas Putri','Perempuan','Jakarta','1997-02-24',2,4,'Medan'),
+    -> ('11123','Mira Wati','Perempuan','Bali','2002-06-12',2,3,'Solo'),
+    -> ('11124','Kartiwi','Perempuan','Bandung','2001-07-03',2,4,'Bima'),
+    -> ('11125','Muhammad Arif','Laki-Laki','Batak','2000-04-0`',2,4,'Bali'),
+    -> ('11126','Muhammad Syahid','Laki-Laki','Aceh','1992-02-22',1,1,'Ambon'),
+    -> ('11127','Miatul Nabilla','Perempuan','Bima','1999-08-12',1,2,'Jakarta'),
+    -> ('11128','Putri Jeysy','Perempuan','Banten','1995-02-22',1,2,'Bogor'),
+    -> ('11129','Andi Setiawan','Laki-Laki','Surabaya','1984-03-15',1,3,'Surabaya'),
+    -> ('11130','Sabrina','Perempuan','Banten','1978-12-01',1,4,'Jakarta');
+Query OK, 20 rows affected (0.020 sec)
+
+//15. Menampilkan seluruh Data pegawai
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++-----+-------+-----------------+-----------+-----------+------------+----------+-----------+----------+
+| id  | nip   | nama            | gender    | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   |
++-----+-------+-----------------+-----------+-----------+------------+----------+-----------+----------+
+|   1 | 11111 | Muhammad Sumbul | Laki-Laki | Semarang  | 1985-12-20 |        4 |         4 | Malang   |
+|   2 | 11112 | Ilham Santoso   | Laki-Laki | Bandung   | 1995-02-10 |        4 |         4 | Bima     |
+|   3 | 11113 | Fitriyani       | Perempuan | Acah      | 1972-06-03 |        4 |         3 | Mataram  |
+|   4 | 11114 | Muhammad Salim  | Laki-Laki | Arab      | 1970-02-01 |        4 |         2 | Bogor    |
+|   5 | 11115 | Asep Sumanto    | Laki-Laki | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |
+|   6 | 11116 | Uni Ramadhani   | Perempuan | Batak     | 1982-01-07 |        3 |         1 | Malang   |
+|   7 | 11117 | Nur Indah       | Perempuan | Bima      | 1992-11-04 |        3 |         2 | Makassar |
+|   8 | 11118 | Muhammad Usman  | Laki-Laki | Jakarta   | 1989-08-14 |        3 |         4 | Depok    |
+|   9 | 11119 | Muhammad Ali    | Laki-Laki | Bekasi    | 1983-09-01 |        3 |         3 | Solo     |
+|  10 | 11120 | Isna Wati       | Perempuan | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |
+|  11 | 11121 | Fitrah Utami    | Perempuan | Banten    | 2000-10-23 |        2 |         1 | Mataram  |
+|  12 | 11122 | Nilas Putri     | Perempuan | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |
+|  13 | 11123 | Mira Wati       | Perempuan | Bali      | 2002-06-12 |        2 |         3 | Solo     |
+|  14 | 11124 | Kartiwi         | Perempuan | Bandung   | 2001-07-03 |        2 |         4 | Bima     |
+|  15 | 11125 | Muhammad Arif   | Laki-Laki | Batak     | 2000-04-01 |        2 |         4 | Bali     |
+|  16 | 11126 | Muhammad Syahid | Laki-Laki | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |
+|  17 | 11127 | Miatul Nabilla  | Perempuan | Bima      | 1999-08-12 |        1 |         2 | Jakarta  |
+|  18 | 11128 | Putri Jeysy     | Perempuan | Banten    | 1995-02-22 |        1 |         2 | Bogor    |
+|  19 | 11129 | Andi Setiawan   | Laki-Laki | Surabaya  | 1994-03-15 |        1 |         3 | Surabaya |
+|  20 | 11130 | Sabrina         | Perempuan | Banten    | 1978-12-01 |        1 |         4 | Jakarta  |
++-----+-------+-----------------+-----------+-----------+------------+----------+-----------+----------+
+20 rows in set (0.001 sec)
+
+//16. Ubah data 5 orang pegawai (dengan ketentuan ubah 3 kolom(bebas))
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET tmp_lahir = 'Bima', idjabatan = 4, alamat = 'Bogor'
+    -> WHERE id IN (3,8,9,15,17);
+Query OK, 5 rows affected (0.010 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+//17. Menghapus dua data paling akhir
+MariaDB [dbpegawai]> DELETE FROM pegawai
+    -> ORDER BY id DESC
+    -> LIMIT 2;
+Query OK, 2 rows affected (0.009 sec)
+
+//18. Menambah Kolom Berat Badan sesuai deskripsi
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN IF NOT EXISTS
+    -> berat_badan FLOAT NOT NULL;
+Query OK, 0 rows affected (0.015 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+//Menginput data secara acak
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET berat_badan = FLOOR(RAND() * 80) + 40;
+Query OK, 18 rows affected (0.010 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]>  SELECT * FROM pegawai;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |
+|  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |
+|  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |
+| 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |
+| 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |
+| 12 | 11122 | Nilas Putri     | Perempuan     | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |
+| 13 | 11123 | Mira Wati       | Perempuan     | Bali      | 2002-06-12 |        2 |         3 | Solo     |          92 |
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima     |          59 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta  |          62 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor    |         107 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+18 rows in set (0.000 sec)
+
+//19. Gunakan alter tabel pada tabel pegawai untuk menambahkan kolom baru umur
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> ADD COLUMN IF NOT EXISTS
+    -> umur INT NOT NULL;
+Query OK, 0 rows affected (0.014 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+//mengisi dengan umur random(querry dapet searching)
+MariaDB [dbpegawai]> UPDATE pegawai
+    -> SET umur = FLOOR(RAND() * 40) + 20;
+Query OK, 18 rows affected (0.009 sec)
+Rows matched: 18  Changed: 18  Warnings: 0
+
+MariaDB [dbpegawai]> SELECT * FROM pegawai;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
+|  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |   46 |
+|  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |   27 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
+| 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |   31 |
+| 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |   22 |
+| 12 | 11122 | Nilas Putri     | Perempuan     | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |   37 |
+| 13 | 11123 | Mira Wati       | Perempuan     | Bali      | 2002-06-12 |        2 |         3 | Solo     |          92 |   20 |
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima     |          59 |   49 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |   44 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |   53 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta  |          62 |   34 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor    |         107 |   31 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+18 rows in set (0.000 sec)
+
+//20.Mengubah kolom gender menjadi jenis_kelami
+MariaDB [dbpegawai]> ALTER TABLE pegawai
+    -> CHANGE COLUMN gender jenis_kelamin ENUM('Laki-Laki','Perempuan') NOT NULL;
+Query OK, 0 rows affected (0.015 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+//21. Menampilkan Kolom(nip,nama,jenis_kelamin,alamat)
+MariaDB [dbpegawai]> SELECT nip,nama,jenis_kelamin,alamat FROM pegawai;
++-------+-----------------+---------------+----------+
+| nip   | nama            | jenis_kelamin | alamat   |
++-------+-----------------+---------------+----------+
+| 11111 | Muhammad Sumbul | Laki-Laki     | Malang   |
+| 11112 | Ilham Santoso   | Laki-Laki     | Bima     |
+| 11113 | Fitriyani       | Perempuan     | Bogor    |
+| 11114 | Muhammad Salim  | Laki-Laki     | Bogor    |
+| 11115 | Asep Sumanto    | Laki-Laki     | Makassar |
+| 11116 | Uni Ramadhani   | Perempuan     | Malang   |
+| 11117 | Nur Indah       | Perempuan     | Makassar |
+| 11118 | Muhammad Usman  | Laki-Laki     | Bogor    |
+| 11119 | Muhammad Ali    | Laki-Laki     | Bogor    |
+| 11120 | Isna Wati       | Perempuan     | Jakarta  |
+| 11121 | Fitrah Utami    | Perempuan     | Mataram  |
+| 11122 | Nilas Putri     | Perempuan     | Medan    |
+| 11123 | Mira Wati       | Perempuan     | Solo     |
+| 11124 | Kartiwi         | Perempuan     | Bima     |
+| 11125 | Muhammad Arif   | Laki-Laki     | Bogor    |
+| 11126 | Muhammad Syahid | Laki-Laki     | Ambon    |
+| 11127 | Miatul Nabilla  | Perempuan     | Jakarta  |
+| 1128  | Putri Jeysy     | Perempuan     | Bogor    |    
++-------+-----------------+---------------+----------+
+17 rows in set (0.000 sec)
+
+//22. Menampilkan baris dengan jenis_kelamin laki-laki
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE jenis_kelamin LIKE '%Laki-Laki';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Semarang  | 1985-12-20 |        4 |         4 | Malang   |          73 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |          96 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          58 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          66 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bima      | 1989-08-14 |        3 |         4 | Bogor    |          72 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          75 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |         101 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
+8 rows in set (0.001 sec)
+
+//23. Menampilkan iddivisi IT/4 gender/jenis_kelamin Perempuan
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE iddivisi = 4 AND jenis_kelamin = 'Perempuan';
++----+-------+-----------+---------------+-----------+------------+----------+-----------+--------+-------------+
+| id | nip   | nama      | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan |
++----+-------+-----------+---------------+-----------+------------+----------+-----------+--------+-------------+
+|  3 | 11113 | Fitriyani | Perempuan     | Bima      | 1972-06-03 |        4 |         4 | Bogor  |          61 |
++----+-------+-----------+---------------+-----------+------------+----------+-----------+--------+-------------+
+1 row in set (0.008 sec)
+
+
+//24. Menampilkan baris tertentu(umur > 30 dan tmp_lahir = jakarta)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE umur > 30 AND tmp_lahir = 'Jakarta';
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama         | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  5 | 11115 | Asep Sumanto | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
+| 12 | 11122 | Nilas Putri  | Perempuan     | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |   37 |
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+2 rows in set (0.001 sec)
+
+//25. Menampilkan baris(iddivsi = 3/marketing, umur > 30, jenis-kelamin perempuan)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE iddivisi = 3 AND umur > 30 AND jenis_kelamin = 'Perempuan';
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+|  6 | 11116 | Uni Ramadhani | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang  |          88 |   46 |
+| 10 | 11120 | Isna Wati     | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta |          68 |   31 |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+2 rows in set (0.000 sec)
+
+//26.Menampilkan nip(klausa key)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE nip = '11111';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok  |          86 |   47 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+1 row in set (0.000 sec)
+
+//27. Menampilkan jenis_kelamin(klausa non key)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |   44 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |   53 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+8 rows in set (0.000 sec)
+
+//28.Menampilkan beberapa NIP(klausa IN)
+MariaDB [dbpegawai]>  SELECT * FROM pegawai
+    -> WHERE nip IN('11111','11112','11113');
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok  |          86 |   47 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima   |         109 |   44 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok  |          91 |   59 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+3 rows in set (0.001 sec)
+
+//29. Menampilkan beberapa tempat lahir(NOT IN)
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> WHERE tmp_lahir NOT IN('Jakarta','Depok','Bali');
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |   46 |
+|  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |   27 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
+| 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |   31 |
+| 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |   22 |
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima     |          59 |   49 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |   44 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |   53 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta  |          62 |   34 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor    |         107 |   31 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+12 rows in set (0.000 sec)
+
+//30. Menampilkan nama (asc)
+MariaDB [dbpegawai]>  SELECT * FROM pegawai
+    -> ORDER BY nama ASC;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
+| 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |   22 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+| 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |   31 |
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima     |          59 |   49 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta  |          62 |   34 |
+| 13 | 11123 | Mira Wati       | Perempuan     | Bali      | 2002-06-12 |        2 |         3 | Solo     |          92 |   20 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |   44 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |   53 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
+| 12 | 11122 | Nilas Putri     | Perempuan     | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |   37 |
+|  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |   27 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor    |         107 |   31 |
+|  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |   46 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+18 rows in set (0.000 sec)
+
+//31. Menampilkan pegawai dari yang terberat ke yang teringan
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> ORDER BY berat_badan DESC;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor    |         107 |   31 |
+|  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |   27 |
+| 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |   22 |
+| 13 | 11123 | Mira Wati       | Perempuan     | Bali      | 2002-06-12 |        2 |         3 | Solo     |          92 |   20 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |   46 |
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon    |          74 |   53 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
+| 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |   31 |
+| 12 | 11122 | Nilas Putri     | Perempuan     | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |   37 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor    |          63 |   44 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta  |          62 |   34 |
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima     |          59 |   49 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+18 rows in set (0.000 sec)
+
+
+//32. Menampilkan 5 pegawai teratas dengan LIMIT dan OFFSET
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> LIMIT 5 OFFSET 0;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
+|  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
+|  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+5 rows in set (0.000 sec)
+
+//33. Menampilkan 5 pegawai terbawah dengan LIMIT dan OFFSET
+MariaDB [dbpegawai]> SELECT * FROM pegawai
+    -> LIMIT 5 OFFSET 13;
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat  | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+| 14 | 11124 | Kartiwi         | Perempuan     | Bandung   | 2001-07-03 |        2 |         4 | Bima    |          59 |   49 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor   |          63 |   44 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon   |          74 |   53 |
+| 17 | 11127 | Miatul Nabilla  | Perempuan     | Bima      | 1999-08-12 |        1 |         4 | Jakarta |          62 |   34 |
+| 18 | 11128 | Putri Jeysy     | Perempuan     | Banten    | 1994-02-22 |        1 |         2 | Bogor   |         107 |   31 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+---------+-------------+------+
+5 rows in set (0.000 sec)
+
+//34. Menampilkan jumlah pegawai(aggeragat count)
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jumlah_pegawai FROM pegawai;
++----------------+
+| jumlah_pegawai |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.000 sec)
+
+//35. Menampilkan nip,nama pegawai, umur yg paling tua gunakan fungsi aggregrat max (kombinasi
+MariaDB [dbpegawai]> SELECT nip,nama,umur FROM pegawai WHERE umur =(SELECT MAX(umur) FROM pegawai);
++-------+-----------+------+
+| nip   | nama      | umur |
++-------+-----------+------+
+| 11113 | Fitriyani |   59 |
++-------+-----------+------+
+1 row in set (0.001 sec)
+
+//36. menampilkan nip,nama pegawai, berat_badan yg paling kurus gunakan fungsi aggregrat min
+(kombinasi dengan sub query) 
+MariaDB [dbpegawai]>  SELECT nip,nama,berat_badan FROM pegawai WHERE berat_badan =(SELECT MIN(berat_badan) FROM pegawai);
++-------+--------------+-------------+
+| nip   | nama         | berat_badan |
++-------+--------------+-------------+
+| 11115 | Asep Sumanto |          46 |
++-------+--------------+-------------+
+1 row in set (0.000 sec)
+
+//37. Menampilkan Umur rata-rata pegawai
+MariaDB [dbpegawai]> SELECT AVG(umur) AS umur_rata2 FROM pegawai;
++------------+
+| umur_rata2 |
++------------+
+|    36.5556 |
++------------+
+1 row in set (0.000 sec)
+
+//38.Menampilkan jumlah data pegawai yang laki2 dan berumur lebih dari 40 tahun dan berjabatan
+Manajer, gunakan fungsi aggregrat count dan klausa AND 
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jml_manajer FROM pegawai
+    -> WHERE jenis_kelamin = 'Laki-Laki' AND umur > 40  AND idjabatan = 3;
++-------------+
+| jml_manajer |
++-------------+
+|           0 |
++-------------+
+1 row in set (0.000 sec)
+
+//39. Menampilkan jumlah data pegawai yang perempuan dan berumur kurang dari 40 tahun dan
+berjabatan Staff, gunakan fungsi aggregrat count dan klausa AND 
+MariaDB [dbpegawai]>  SELECT COUNT(*) AS jml_staff_perempuan FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan' AND umur < 40  AND idjabatan = 4;
++---------------------+
+| jml_staff_perempuan |
++---------------------+
+|                   3 |
++---------------------+
+1 row in set (0.000 sec)
+
+//40. Menampilkan jumlah data pegawai yang perempuan gunakan fungsi aggregrat count
+MariaDB [dbpegawai]> SELECT COUNT(*) AS jml_karyawan_perempuan FROM pegawai
+    -> WHERE jenis_kelamin = 'Perempuan';
++------------------------+
+| jml_karyawan_perempuan |
++------------------------+
+|                     10 |
++------------------------+
+1 row in set (0.000 sec)
+
+//41. Menampilkan jumlah pegawai yang bekerja di divisi SDM dengan fungsi aggregrat sum dan klausa
+WHERE
+MariaDB [dbpegawai]> SELECT SUM(iddivisi) FROM pegawai WHERE iddivisi = 1;
++---------------+
+| SUM(iddivisi) |
++---------------+
+|             3 |
++---------------+
+1 row in set (0.000 sec)
+
+//42. Tampilkan jumlah pegawai berdasarkan divisi masing2 menggunakan fungsi aggregrat count
+dan klausa group by
+MariaDB [dbpegawai]> SELECT iddivisi, COUNT(*) AS jumlah_pegawai
+    ->  FROM pegawai
+    ->  GROUP BY iddivisi;
++----------+----------------+
+| iddivisi | jumlah_pegawai |
++----------+----------------+
+|        1 |              3 |
+|        2 |              5 |
+|        3 |              5 |
+|        4 |              5 |
++----------+----------------+
+4 rows in set (0.000 sec)
+
+//43. Menampilkan data jumlah pegawai berdasarkan gender, yg jumlah minimal 10 orang (gunakan
+group by dan having) 
+MariaDB [dbpegawai]> SELECT jenis_kelamin, COUNT(*) AS jumlah_pegawai
+    ->  FROM pegawai
+    -> GROUP BY jenis_kelamin
+    -> HAVING COUNT(*) >= 10;
++---------------+----------------+
+| jenis_kelamin | jumlah_pegawai |
++---------------+----------------+
+| Perempuan     |             10 |
++---------------+----------------+
+1 row in set (0.000 sec)
+
+//44. Mencari data dengan nama depan muhammad 
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    ->  WHERE nama LIKE 'Muhammad%';
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama            | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok  |          86 |   47 |
+|  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor  |          88 |   22 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok  |          51 |   20 |
+|  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor  |          68 |   38 |
+| 15 | 11125 | Muhammad Arif   | Laki-Laki     | Bima      | 2000-04-01 |        2 |         4 | Bogor  |          63 |   44 |
+| 16 | 11126 | Muhammad Syahid | Laki-Laki     | Aceh      | 1992-04-22 |        1 |         1 | Ambon  |          74 |   53 |
++----+-------+-----------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+6 rows in set (0.000 sec)
+
+//45. Mencari data dengan akhir Santoso
+MariaDB [dbpegawai]> SELECT *
+    ->  FROM pegawai
+    -> WHERE nama LIKE '%Santoso';
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+|  2 | 11112 | Ilham Santoso | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima   |         109 |   44 |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+1 row in set (0.000 sec)
+
+//46. mencari data yang mengandung nama Asep
+MariaDB [dbpegawai]> SELECT *
+    -> FROM pegawai
+    ->  WHERE nama LIKE '%ASEP%';
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+| id | nip   | nama         | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat   | berat_badan | umur |
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+|  5 | 11115 | Asep Sumanto | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
++----+-------+--------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
+1 row in set (0.000 sec)
+
+//47. Mencari data nama dengan huruf kelima S
+MariaDB [dbpegawai]>  SELECT *
+    -> FROM pegawai
+    -> WHERE nama LIKE '__S%';
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| id | nip   | nama          | jenis_kelamin | tmp_lahir | tgl_lahir  | iddivisi | idjabatan | alamat | berat_badan | umur |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+| 12 | 11122 | Nilas Putri     | Perempuan | Jakarta   | 1997-02-24 |        2 |         4 | Medan    |          67 |   37 |
++----+-------+---------------+---------------+-----------+------------+----------+-----------+--------+-------------+------+
+2 rows in set (0.001 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
