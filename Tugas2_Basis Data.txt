@@ -204,12 +204,12 @@ MariaDB [dbpegawai]>  SELECT * FROM pegawai;
 +----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+
 |  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |
 |  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |
-|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bima      | 1972-06-03 |        4 |         4 | Depok    |          91 |
 |  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |
 |  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |
 |  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |
 |  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |
-|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bima      | 1989-08-14 |        3 |         4 | Depok    |          51 |
 |  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |
 | 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |
 | 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |
@@ -242,12 +242,12 @@ MariaDB [dbpegawai]> SELECT * FROM pegawai;
 +----+-------+-----------------+---------------+-----------+------------+----------+-----------+----------+-------------+------+
 |  1 | 11111 | Muhammad Sumbul | Laki-Laki     | Bali      | 1985-12-20 |        4 |         4 | Depok    |          86 |   47 |
 |  2 | 11112 | Ilham Santoso   | Laki-Laki     | Bandung   | 1995-02-10 |        4 |         4 | Bima     |         109 |   44 |
-|  3 | 11113 | Fitriyani       | Perempuan     | Bali      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
+|  3 | 11113 | Fitriyani       | Perempuan     | Bima      | 1972-06-03 |        4 |         4 | Depok    |          91 |   59 |
 |  4 | 11114 | Muhammad Salim  | Laki-Laki     | Arab      | 1970-02-01 |        4 |         2 | Bogor    |          88 |   22 |
 |  5 | 11115 | Asep Sumanto    | Laki-Laki     | Jakarta   | 1999-05-10 |        4 |         4 | Makassar |          46 |   34 |
 |  6 | 11116 | Uni Ramadhani   | Perempuan     | Batak     | 1982-01-07 |        3 |         1 | Malang   |          88 |   46 |
 |  7 | 11117 | Nur Indah       | Perempuan     | Bima      | 1992-11-04 |        3 |         2 | Makassar |         103 |   27 |
-|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bali      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
+|  8 | 11118 | Muhammad Usman  | Laki-Laki     | Bima      | 1989-08-14 |        3 |         4 | Depok    |          51 |   20 |
 |  9 | 11119 | Muhammad Ali    | Laki-Laki     | Bima      | 1983-09-01 |        3 |         4 | Bogor    |          68 |   38 |
 | 10 | 11120 | Isna Wati       | Perempuan     | Lampung   | 1991-11-17 |        3 |         4 | Jakarta  |          68 |   31 |
 | 11 | 11121 | Fitrah Utami    | Perempuan     | Banten    | 2000-10-23 |        2 |         1 | Mataram  |          94 |   22 |
